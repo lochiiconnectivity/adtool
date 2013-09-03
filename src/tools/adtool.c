@@ -43,6 +43,7 @@ void usage() {
 		"userlock           <username>                      disable a user account\n"
 		"userunlock         <username>                      enable a user account\n"
 		"setpass            <user> [password]               set user's password\n"
+		"setpassdn          <dn> [password]                 set dn's password\n"
 		"usermove           <user> <new container>          move user to another container\n"
 		"userrename         <old username> <new username>   rename user\n"
 		"\n"
@@ -179,6 +180,40 @@ void setpass(char **argv) {
 		exit(1);
 	}
 	result=ad_setpass(*dn, password);
+	free(password);
+	if(result!=AD_SUCCESS) {
+		fprintf(stderr, "error: %s\n", ad_get_error());
+		fprintf(stderr, "Ensure openldap is built with ssl support, and that you are using a secure connection to your active directory server (ldaps:// rather than plain ldap://).\n");
+		exit(1);
+	}
+}
+
+void setpassdn(char **argv) {
+	char *dn;
+	char *password;
+	char *password2;
+	int result;
+
+	dn=argv[0];
+
+	if(argv[1]==NULL) {
+		password=getpass("Password:");
+		password2=strdup(password);
+		password=getpass("Re-enter password:");
+		if(strcmp(password, password2)) {
+			fprintf(stderr, "Error: passwords don't match\n");
+			exit(1);
+		}
+	} else {
+		password=strdup(argv[1]);
+		memset(argv[1], 0, strlen(argv[1]));
+	}
+
+	if(ad_get_error_num()!=AD_SUCCESS) {
+		fprintf(stderr, "error: %s\n", ad_get_error());
+		exit(1);
+	}
+	result=ad_setpass(dn, password);
 	free(password);
 	if(result!=AD_SUCCESS) {
 		fprintf(stderr, "error: %s\n", ad_get_error());
@@ -602,6 +637,8 @@ struct function function_table[] = {
 	{"userunlock", userunlock, 1},
 
 	{"setpass", setpass, 1},
+
+	{"setpassdn", setpassdn, 1},
 
 	{"usermove", usermove, 2},
 

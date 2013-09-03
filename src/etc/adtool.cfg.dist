@@ -1,5 +1,5 @@
 
-# use ldaps:// for secure connection - needed for setpass to work
+# use ldaps:// for secure connection - needed for setpass/setpassdn to work
 uri ldap://dc1.example.com
 binddn cn=administrator,ou=admin,dc=example,dc=com
 bindpw passw0rd
