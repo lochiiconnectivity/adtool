@@ -381,7 +381,7 @@ int ad_setpass(char *dn, char *password) {
 }
 
 /* general search function */
-char **ad_search(char *attribute, char *value) {
+char **ad_search(char *attribute, char *value, char *class) {
 	LDAP *ds;
 	char *filter;
 	int filter_length;
@@ -401,9 +401,9 @@ char **ad_search(char *attribute, char *value) {
 		return (char **)-1;
 	}
 
-	filter_length=(strlen(attribute)+strlen(value)+25);
+	filter_length=(strlen(attribute)+strlen(value)+strlen(class)+21);
 	filter=malloc(filter_length);
-        snprintf(filter, filter_length, "(&(objectClass=user)(%s=%s))", attribute, value);
+        snprintf(filter, filter_length, "(&(objectClass=%s)(%s=%s))", class, attribute, value);
 
 	result=ldap_search_s(ds, search_base, LDAP_SCOPE_SUBTREE, filter, attrs, 1, &res);
 	if(result!=LDAP_SUCCESS) {

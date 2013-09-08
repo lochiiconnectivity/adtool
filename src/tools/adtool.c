@@ -96,7 +96,7 @@ void userdelete(char **argv){
 
 	user=argv[0];
 
-        dn=ad_search("name", user);
+        dn=ad_search("name", user, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -116,7 +116,7 @@ void userlock(char **argv) {
 
 	username=argv[0];
 
-        dn=ad_search("name", username);
+        dn=ad_search("name", username, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -137,7 +137,7 @@ void userunlock(char **argv) {
 
 	username=argv[0];
 
-        dn=ad_search("name", username);
+        dn=ad_search("name", username, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -173,7 +173,7 @@ void setpass(char **argv) {
 		memset(argv[1], 0, strlen(argv[1]));
 	}
 
-	dn=ad_search("name", username);
+	dn=ad_search("name", username, "user");
 	if(ad_get_error_num()!=AD_SUCCESS) {
 		fprintf(stderr, "error: %s\n", ad_get_error());
 		exit(1);
@@ -196,7 +196,7 @@ void usermove(char **argv) {
 	username=argv[0];
 	new_container=argv[1];
 
-        dn=ad_search("name", username);
+        dn=ad_search("name", username, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -220,7 +220,7 @@ void userrename(char **argv) {
 	old_username=argv[0];
 	new_username=argv[1];
 
-        dn=ad_search("name", old_username);
+        dn=ad_search("name", old_username, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -280,7 +280,7 @@ void groupdelete(char **argv){
 
 	group=argv[0];
 
-        dn=ad_search("name", group);
+        dn=ad_search("name", group, "group");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -301,13 +301,13 @@ void groupadduser(char **argv) {
 	group=argv[0];
 	user=argv[1];
 
-        group_dn=ad_search("cn", group);
+        group_dn=ad_search("cn", group, "group");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
         }
 
-        user_dn=ad_search("name", user);
+        user_dn=ad_search("name", user, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -328,13 +328,13 @@ void groupremoveuser(char **argv) {
 	group=argv[0];
 	user=argv[1];
 
-        group_dn=ad_search("name", group);
+        group_dn=ad_search("name", group, "group");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
         }
 
-        user_dn=ad_search("name", user);
+        user_dn=ad_search("name", user, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -355,7 +355,7 @@ void groupsubtreeremove(char **argv) {
 	container=argv[0];
 	user=argv[1];
 
-        user_dn=ad_search("name", user);
+        user_dn=ad_search("name", user, "user");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -377,7 +377,7 @@ void attributeget(char **argv) {
 	object=argv[0];
 	attribute=argv[1];
 
-        dn=ad_search("name", object);
+        dn=ad_search("name", object, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -407,7 +407,7 @@ void attributeadd(char **argv) {
 	attribute=argv[1];
 	value=argv[2];
 
-        dn=ad_search("name", object);
+        dn=ad_search("name", object, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -435,7 +435,7 @@ void attributeaddbinary(char **argv) {
 	attribute=argv[1];
 	filename=argv[2];
 
-        dn=ad_search("name", object);
+        dn=ad_search("name", object, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -473,7 +473,7 @@ void attributereplace(char **argv) {
 	attribute=argv[1];
 	value=argv[2];
 
-        dn=ad_search("name", object);
+        dn=ad_search("name", object, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -498,7 +498,7 @@ void attributedelete(char **argv) {
 	attribute=argv[1];
 	value=argv[2];
 
-        dn=ad_search("name", object);
+        dn=ad_search("name", object, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
@@ -521,7 +521,7 @@ void search(char **argv) {
 	attribute=argv[0];
 	value=argv[1];
 
-        results=ad_search(attribute, value);
+        results=ad_search(attribute, value, "*");
         if(results==(char **)-1) {
                 fprintf(stderr, "Error: %s\n", ad_get_error());
                 exit(1);
@@ -557,7 +557,7 @@ void oudelete(char **argv){
 
 	ou=argv[0];
 
-        dn=ad_search("ou", ou);
+        dn=ad_search("ou", ou, "*");
         if(ad_get_error_num()!=AD_SUCCESS) {
                 fprintf(stderr, "error: %s\n", ad_get_error());
                 exit(1);
