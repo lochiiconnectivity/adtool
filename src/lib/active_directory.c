@@ -401,9 +401,9 @@ char **ad_search(char *attribute, char *value) {
 		return (char **)-1;
 	}
 
-	filter_length=(strlen(attribute)+strlen(value)+4);
+	filter_length=(strlen(attribute)+strlen(value)+25);
 	filter=malloc(filter_length);
-	snprintf(filter, filter_length, "(%s=%s)", attribute, value);
+        snprintf(filter, filter_length, "(&(objectClass=user)(%s=%s))", attribute, value);
 
 	result=ldap_search_s(ds, search_base, LDAP_SCOPE_SUBTREE, filter, attrs, 1, &res);
 	if(result!=LDAP_SUCCESS) {
